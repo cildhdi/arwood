@@ -1,0 +1,21 @@
+.avatar-view {
+  height: 100%;
+}
+
+
+.user-avatar {
+  width: 140rpx;
+  height: 140rpx;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  overflow: hidden;
+}
+
+.userinfo-bg {
+  background-color: #2d8cf0;
+}
+
+.phone-text {
+  text-overflow: clip;
+}

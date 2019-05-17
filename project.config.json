@@ -1,0 +1,19 @@
+{
+	"miniprogramRoot": "dist/",
+	"projectname": "arwood",
+	"description": "",
+	"appid": "wx193929a0aac9efaa",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true,
+		"autoAudits": false,
+		"checkInvalidKey": true
+	},
+	"compileType": "miniprogram",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {}
+}
