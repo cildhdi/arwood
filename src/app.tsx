@@ -22,7 +22,10 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/mine/index',
-      'pages/goods/index'
+      'pages/products/index',
+      'pages/change_info/index',
+      'pages/request_admin/index',
+      'pages/add_product/index'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -31,31 +34,26 @@ class App extends Component {
       navigationBarTextStyle: 'black',
     },
     tabBar: {
+      color: '#aaa',
+      selectedColor: '#000',
       list: [
         {
-          pagePath: 'pages/goods/index',
+          pagePath: 'pages/products/index',
           text: '产品',
           iconPath: 'pics/goods.png',
-          selectedIconPath: 'pics/s-goods.png',
+          selectedIconPath: 'pics/goods.png',
+          // selectedIconPath: 'pics/s-goods.png',
         },
         {
           pagePath: 'pages/mine/index',
           text: '我的',
           iconPath: 'pics/mine.png',
-          selectedIconPath: 'pics/s-mine.png'
+          selectedIconPath: 'pics/mine.png'
+          // selectedIconPath: 'pics/s-mine.png'
         }
       ]
     }
   }
-
-  componentDidMount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
-  componentDidCatchError() { }
-
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
   render() {

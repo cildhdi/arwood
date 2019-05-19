@@ -1,6 +1,6 @@
-import Taro, { Component, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
-import './index.scss'
+import Taro, { Component, Config } from '@tarojs/taro';
+import { View } from '@tarojs/components';
+import './index.scss';
 import config from './../../config';
 
 export default class Index extends Component {
@@ -34,6 +34,7 @@ export default class Index extends Component {
             if (res.data && res.data.errcode == 0) {
               console.log('token: ' + res.data.data.token);
               Taro.setStorageSync('token', res.data.data.token);
+              Taro.setStorageSync('updateInfo', 'true');
               Taro.switchTab({
                 url: '/pages/mine/index'
               });

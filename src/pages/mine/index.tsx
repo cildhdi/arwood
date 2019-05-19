@@ -5,29 +5,36 @@ import './index.scss'
 
 import config from './../../config';
 
-interface BasicUserInfo {
+export interface BasicUserInfo {
   name: string,
-  phone: string
+  phone: string,
+  isAdmin: boolean
 }
 
 export default class Index extends Component<{}, BasicUserInfo> {
   config: Config = {
     navigationBarTitleText: '我的',
+    navigationBarBackgroundColor: '#2d8cf0',
+    navigationBarTextStyle: 'white'
   }
 
   constructor() {
     super(...arguments);
     this.setState({
       name: '',
-      phone: ''
+      phone: '',
+      isAdmin: false
     });
   }
 
-  componentWillMount() { }
 
-  componentDidMount() {
-    Taro.showLoading();
-    console.log(Taro.getStorageSync('token'));
+  componentDidShow() {
+    if (Taro.getStorageSync('updateInfo') != 'true') {
+      return;
+    }
+    Taro.showLoading({
+      title: '获取用户信息中'
+    });
     Taro.request({
       url: config.infoUrl,
       data: {
@@ -35,13 +42,14 @@ export default class Index extends Component<{}, BasicUserInfo> {
       },
       method: 'POST',
       success: (res) => {
-        console.log(res);
         Taro.hideLoading();
         if (res.data && res.data.errcode == 0) {
           this.setState({
             name: res.data.data.name,
-            phone: res.data.data.phone
+            phone: res.data.data.phone,
+            isAdmin: res.data.data.isAdmin
           });
+          Taro.setStorageSync('updateInfo', 'false');
         } else {
           Taro.showModal({
             title: '提示',
@@ -52,11 +60,23 @@ export default class Index extends Component<{}, BasicUserInfo> {
     });
   }
 
-  componentWillUnmount() { }
+  changeUserInfo() {
+    Taro.navigateTo({
+      url: '/pages/change_info/index'
+    });
+  }
 
-  componentDidShow() { }
+  requestAdmin() {
+    Taro.navigateTo({
+      url: '/pages/request_admin/index'
+    });
+  }
 
-  componentDidHide() { }
+  addProduct() {
+    Taro.navigateTo({
+      url: '/pages/add_product/index'
+    });
+  }
 
   render() {
     const avatarOpenData = {
@@ -73,6 +93,15 @@ export default class Index extends Component<{}, BasicUserInfo> {
       <AtList>
         <AtListItem title='称呼' extraText={this.state.name} />
         <AtListItem title='电话号码' extraText={this.state.phone} />
+        <AtListItem title='修改个人信息' arrow='right' onClick={this.changeUserInfo} />
+        {
+          this.state.isAdmin ?
+            <View>
+              <AtListItem title='添加产品' arrow='right' onClick={this.addProduct.bind(this)} />
+              <AtListItem title='删除产品' arrow='right' />
+            </View> :
+            <AtListItem title='申请成为管理员' arrow='right' onClick={this.requestAdmin.bind(this)} />
+        }
       </AtList>
     </View>
     );
