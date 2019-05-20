@@ -5,21 +5,18 @@ import config from './../../config';
 
 export default class Index extends Component {
 
-  /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
   config: Config = {
     navigationBarTitleText: '首页'
   }
 
-  componentWillMount() {
-    Taro.showLoading({
-      title: '登录中'
+  loginSuccess() {
+    Taro.setStorageSync('updateInfo', 'true');
+    Taro.switchTab({
+      url: '/pages/mine/index'
     });
+  }
+
+  login() {
     Taro.login({
       success: (res) => {
         console.log("code: " + res.code);
@@ -34,10 +31,7 @@ export default class Index extends Component {
             if (res.data && res.data.errcode == 0) {
               console.log('token: ' + res.data.data.token);
               Taro.setStorageSync('token', res.data.data.token);
-              Taro.setStorageSync('updateInfo', 'true');
-              Taro.switchTab({
-                url: '/pages/mine/index'
-              });
+              this.loginSuccess();
             } else {
               Taro.showModal({
                 title: '警告',
@@ -55,13 +49,34 @@ export default class Index extends Component {
     });
   }
 
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
+  componentDidMount() {
+    Taro.showLoading({
+      title: '登录中'
+    });
+    try {
+      let token: string = Taro.getStorageSync('token');
+      if (token && token.length != 0) {
+        Taro.request({
+          url: config.tokenLogin,
+          method: 'POST',
+          data: {
+            token: token
+          },
+          success: (res) => {
+            if (res.data && res.data.errcode == 0) {
+              this.loginSuccess();
+            } else {
+              this.login();
+            }
+          }
+        });
+      } else {
+        this.login();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   render() {
     return (

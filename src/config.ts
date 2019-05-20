@@ -9,5 +9,6 @@ export default {
     imgUploaded: mainUrl + 'imgUploaded/',
     addProduct: mainUrl + 'addProduct/',
     getProducts: mainUrl + 'getProducts/',
-    getProduct: mainUrl + 'getProduct/'
+    getProduct: mainUrl + 'getProduct/',
+    tokenLogin: mainUrl + 'tokenLogin/'
 }

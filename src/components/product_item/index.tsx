@@ -5,9 +5,17 @@ import { AtCard } from 'taro-ui'
 import { Product } from './../../interfaces'
 
 export default class Index extends Component<Product> {
+
+  onClickImage(url: string) {
+    Taro.previewImage({
+      current: url,
+      urls: this.props.pics.map((ele) => ele.url)
+    });
+  }
+
   render() {
     return (
-      <View style='margin-top:30rpx'>
+      <View key={this.props.id} style='margin-top:30rpx'>
         <AtCard title={this.props.name}>
           <View>
             {this.props.desc}
@@ -17,6 +25,7 @@ export default class Index extends Component<Product> {
               return <Image className='product-img at-col at-col-4'
                 mode='aspectFill'
                 src={ele.url}
+                onClick={() => { this.onClickImage(ele.url); }}
               />;
             })}
           </View>
@@ -30,5 +39,6 @@ export default class Index extends Component<Product> {
 (Index as any).defaultProps = {
   name: '',
   desc: '',
-  pics: []
+  pics: [],
+  onClick: () => { }
 }

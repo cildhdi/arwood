@@ -40,6 +40,28 @@ export default class Index extends Component<{}, Product> {
     });
   }
 
+  finish(urls: { url: string }[]) {
+    Taro.request({
+      url: config.addProduct,
+      method: 'POST',
+      data: {
+        token: Taro.getStorageSync('token'),
+        name: this.state.name,
+        desc: this.state.desc,
+        urls: urls
+      },
+      success: (res) => {
+        console.log(res);
+      }
+    });
+    Taro.hideLoading();
+    Taro.navigateBack();
+    Taro.showToast({
+      title: '发布成功',
+      icon: 'success'
+    });
+  }
+
   onSubmit() {
     if (this.state.name.length == 0 || this.state.desc.length == 0) {
       Taro.showToast({
@@ -51,49 +73,38 @@ export default class Index extends Component<{}, Product> {
     Taro.showLoading({
       title: '发布中'
     });
-    let urls: { url: string }[] = [];
-    this.state.pics.forEach(element => {
-      qiniu.upload({
-        filePath: element.url,
-        success: (res) => {
-          Taro.request({
-            url: config.imgUploaded,
-            method: 'POST',
-            data: {
-              token: Taro.getStorageSync('token'),
-              url: res.imageURL
-            }
-          });
-          urls.push({ url: res.imageURL });
-          if (urls.length == this.state.pics.length) {
+    if (this.state.pics.length != 0) {
+      let urls: { url: string }[] = [];
+      this.state.pics.forEach(element => {
+        qiniu.upload({
+          filePath: element.url,
+          success: (res) => {
             Taro.request({
-              url: config.addProduct,
+              url: config.imgUploaded,
               method: 'POST',
               data: {
                 token: Taro.getStorageSync('token'),
-                name: this.state.name,
-                desc: this.state.desc,
-                urls: urls
+                url: res.imageURL
               }
             });
-            Taro.hideLoading();
-            Taro.showToast({
-              title: '发布成功',
-              icon: 'success'
-            });
-            Taro.navigateBack();
-          }
-        },
-        fail: () => {
+            urls.push({ url: res.imageURL });
+            if (urls.length == this.state.pics.length) {
+              this.finish(urls);
+            }
+          },
+          fail: () => {
 
-        },
-        options: {
-          region: 'ECN',
-          uptokenURL: config.uptokenURL,
-          domain: config.staticDomain
-        }
+          },
+          options: {
+            region: 'ECN',
+            uptokenURL: config.uptokenURL,
+            domain: config.staticDomain
+          }
+        });
       });
-    });
+    } else {
+      this.finish([]);
+    }
   }
 
   render() {

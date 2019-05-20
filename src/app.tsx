@@ -40,16 +40,14 @@ class App extends Component {
         {
           pagePath: 'pages/products/index',
           text: '产品',
+          selectedIconPath: 'pics/s-goods.png',
           iconPath: 'pics/goods.png',
-          selectedIconPath: 'pics/goods.png',
-          // selectedIconPath: 'pics/s-goods.png',
         },
         {
           pagePath: 'pages/mine/index',
           text: '我的',
-          iconPath: 'pics/mine.png',
-          selectedIconPath: 'pics/mine.png'
-          // selectedIconPath: 'pics/s-mine.png'
+          selectedIconPath: 'pics/s-mine.png',
+          iconPath: 'pics/mine.png'
         }
       ]
     }

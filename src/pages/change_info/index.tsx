@@ -58,12 +58,12 @@ export default class Index extends Component<{}, BasicUserInfo> {
       success: (res) => {
         console.log(res);
         if (res.data.errcode == 0) {
+          Taro.setStorageSync('updateInfo', 'true');
+          Taro.navigateBack();
           Taro.showToast({
             title: '修改成功',
             icon: 'success',
           });
-          Taro.setStorageSync('updateInfo', 'true');
-          Taro.navigateBack();
         } else {
           Taro.showToast({
             title: '修改失败',

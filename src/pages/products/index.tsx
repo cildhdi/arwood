@@ -14,6 +14,8 @@ interface ProductsState {
 export default class Index extends Component<{}, ProductsState> {
   config: Config = {
     navigationBarTitleText: '产品列表',
+    enablePullDownRefresh: true,
+    backgroundTextStyle: 'dark'
   }
 
   constructor() {
@@ -23,10 +25,7 @@ export default class Index extends Component<{}, ProductsState> {
     });
   }
 
-  componentDidMount() {
-    Taro.showLoading({
-      title: '加载中'
-    });
+  onPullDownRefresh() {
     Taro.request({
       url: config.getProducts,
       method: 'POST',
@@ -39,10 +38,14 @@ export default class Index extends Component<{}, ProductsState> {
             products: res.data.data.products as Product[]
           });
           console.log(this.state.products);
-          Taro.hideLoading();
+          Taro.stopPullDownRefresh();
         }
       }
-    })
+    });
+  }
+
+  componentDidMount() {
+    Taro.startPullDownRefresh();
   }
 
   render() {
